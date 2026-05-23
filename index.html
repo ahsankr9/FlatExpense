@@ -580,7 +580,12 @@ function ls(){
   const userRef=ref(db,'users/'+currentUser+'/data');
   dbListener=onValue(userRef,(snap)=>{
     const val=snap.val();
-    D=val?val:{funds:[],cats:[],exps:[]};
+    if(val){
+      const toArr=v=>{if(!v)return[];if(Array.isArray(v))return v.filter(x=>x!=null);return Object.values(v);};
+      D={funds:toArr(val.funds),cats:toArr(val.cats),exps:toArr(val.exps)};
+    } else {
+      D={funds:[],cats:[],exps:[]};
+    }
     rDash();rFunds();rCats();rExpSel();rExps();
   });
 }
