@@ -97,7 +97,7 @@ body::before{
   flex-shrink:0;
 }
 .logo-ico i{font-size:18px;color:#fff}
-.logo-name{font-size:15px;font-weight:800;color:var(--txt);line-height:1.2;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.logo-name{font-size:18px;font-weight:800;color:var(--txt);line-height:1.2;letter-spacing:-.3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 2px 6px rgba(79,70,229,0.22),0 1px 0 rgba(255,255,255,0.6)}
 .logo-tag{font-size:10px;color:var(--txtD);font-weight:500;margin-top:1px}
 
 /* Desktop nav */
@@ -126,21 +126,21 @@ body::before{
 .nav-mobile{
   display:none;
   position:fixed;left:0;right:0;bottom:0;
+  align-items:stretch;
+  height:calc(64px + env(safe-area-inset-bottom));
   background:rgba(255,255,255,0.94);
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
   border-top:1px solid rgba(79,70,229,0.10);
   box-shadow:0 -6px 24px rgba(79,70,229,0.10);
   z-index:200;
-  padding:7px 6px calc(7px + env(safe-area-inset-bottom));
+  padding:0 6px env(safe-area-inset-bottom);
   gap:4px;
-  min-height:56px;
 }
 .nav-mobile::-webkit-scrollbar{display:none}
 .nav-mobile .nb{
-  flex:1;flex-direction:column;gap:3px;padding:7px 4px;
+  flex:1;flex-direction:column;gap:3px;padding:6px 4px;
   border-radius:12px;font-size:10px;font-weight:700;
   white-space:nowrap;justify-content:center;align-items:center;
-  min-height:48px;
   transition:transform .18s cubic-bezier(.34,1.4,.64,1),background .18s,color .18s,box-shadow .18s;
 }
 .nav-mobile .nb:active{transform:scale(.90)}
@@ -157,7 +157,7 @@ body::before{
   .nav-mobile{display:flex}
   .app{padding-bottom:0}
   .topbar{padding:10px 14px;gap:8px}
-  .logo-name{font-size:13.5px}
+  .logo-name{font-size:16px}
   .logo-ico{width:34px;height:34px;border-radius:10px}
   .logo-ico i{font-size:16px}
   .logo-tag{display:none}
@@ -169,7 +169,7 @@ body::before{
 }
 
 @media(max-width:400px){
-  .logo-name{font-size:12.5px}
+  .logo-name{font-size:14.5px}
   .nav-mobile .nb{font-size:9.5px}
   .nav-mobile .nb i{font-size:18px}
   .mv{font-size:19px}
@@ -180,7 +180,7 @@ body::before{
    BODY
 ══════════════════════════════ */
 .body{padding:18px 20px 28px;flex:1;display:flex;flex-direction:column}
-@media(max-width:600px){.body{padding:12px 12px calc(84px + env(safe-area-inset-bottom))}}
+@media(max-width:600px){.body{padding:12px 12px calc(64px + env(safe-area-inset-bottom) + 28px)}}
 .panel{display:none;flex:1}.panel.active{display:block;flex:1}
 
 /* ══════════════════════════════
@@ -474,7 +474,7 @@ body::before{
   flex-shrink:0;
 }
 .login-logo-ico i{font-size:24px;color:#fff}
-.login-logo-name{font-size:18px;font-weight:800;color:var(--txt);letter-spacing:-.4px}
+.login-logo-name{font-size:21px;font-weight:800;color:var(--txt);letter-spacing:-.4px;text-shadow:0 2px 8px rgba(79,70,229,0.22),0 1px 0 rgba(255,255,255,0.6)}
 .login-logo-tag{font-size:11px;color:var(--txtD);font-weight:500;margin-top:2px}
 .login-title{font-size:24px;font-weight:800;color:var(--txt);margin-bottom:5px;letter-spacing:-.5px}
 .login-sub{font-size:13px;color:var(--txtM);font-weight:500;margin-bottom:26px}
