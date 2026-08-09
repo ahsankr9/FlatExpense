@@ -168,7 +168,7 @@ body::before{
    METRICS CARDS
 ══════════════════════════════ */
 .mg{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:16px}
-@media(min-width:520px){.mg{grid-template-columns:repeat(4,1fr)}}
+@media(min-width:520px){.mg{grid-template-columns:repeat(3,1fr)}}
 .mc{
   background:rgba(255,255,255,0.88);
   backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
@@ -193,9 +193,35 @@ body::before{
 .mc:nth-child(3)::before{background:linear-gradient(90deg,#E11D48,#F97316)}
 .mc:nth-child(4)::before{background:linear-gradient(90deg,#F59E0B,#EF4444)}
 .mc:hover{transform:translateY(-5px) scale(1.02);box-shadow:var(--shadow-md)}
-.ml{font-size:10px;font-weight:700;color:var(--txtD);text-transform:uppercase;letter-spacing:.08em;margin-bottom:8px}
-.mv{font-size:20px;font-weight:800;color:var(--txt);line-height:1;letter-spacing:-.4px}
+.ml{font-size:10.5px;font-weight:800;color:#475569;text-transform:uppercase;letter-spacing:.07em;margin-bottom:8px}
+.mv{font-size:22px;font-weight:800;color:var(--txt);line-height:1;letter-spacing:-.5px}
 .mv.g{color:var(--green)}.mv.r{color:var(--red)}.mv.b{color:var(--blue)}
+
+/* Metric card top accent bars */
+.mc-fund::before{background:linear-gradient(90deg,#6366F1,#8B5CF6)}
+.mc-spent::before{background:linear-gradient(90deg,#F43F5E,#FB923C)}
+.mc-bal-pos::before{background:linear-gradient(90deg,#10B981,#059669)}
+.mc-bal-neg::before{background:linear-gradient(90deg,#F43F5E,#DC2626)}
+
+/* Category breakdown rank chip */
+.pw{display:flex;align-items:flex-start;gap:10px;margin-bottom:16px}
+.pw:last-child{margin-bottom:2px}
+.pw-rank{
+  width:22px;height:22px;border-radius:7px;flex-shrink:0;margin-top:1px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:10px;font-weight:800;color:#fff;
+}
+.pw-body{flex:1;min-width:0}
+.pb{height:7px;background:rgba(79,70,229,0.08);border-radius:99px;overflow:hidden;margin-top:8px}
+.pf{height:100%;border-radius:99px;transition:width .6s cubic-bezier(.4,0,.2,1);background-image:linear-gradient(90deg,rgba(255,255,255,0.35),transparent)}
+
+/* Recent transaction avatar */
+.tx-avatar{
+  width:32px;height:32px;border-radius:10px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+  font-size:13px;font-weight:800;color:#fff;
+  box-shadow:0 3px 8px rgba(0,0,0,0.12);
+}
 
 /* ══════════════════════════════
    GRID & CARDS
@@ -483,31 +509,70 @@ body::before{
 }
 .spin{width:28px;height:28px;border:3px solid var(--bord);border-top-color:var(--acc1);border-radius:50%;animation:spin .7s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+
+/* ══════════════════════════════
+   DATE-GROUPED EXPENSE LIST
+══════════════════════════════ */
+.date-group{margin-bottom:6px}
+.date-group:last-child{margin-bottom:0}
+.date-head{
+  display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:9px 10px;margin:10px 0 2px;border-radius:10px;
+  background:linear-gradient(135deg,rgba(79,70,229,0.07),rgba(8,145,178,0.06));
+  border:1px solid rgba(79,70,229,0.09);
+}
+.date-group:first-child .date-head{margin-top:0}
+.date-head-label{font-size:11px;font-weight:800;color:var(--acc1);letter-spacing:.02em;display:flex;align-items:center;gap:6px}
+.date-head-label i{font-size:13px}
+.date-head-total{font-size:12px;font-weight:800;color:var(--txtM)}
+.date-group .tr{padding-left:6px;padding-right:2px}
+
+/* ══════════════════════════════
+   LANGUAGE TOGGLE
+══════════════════════════════ */
+.lang-toggle{
+  display:flex;align-items:center;background:rgba(79,70,229,0.07);
+  border:1px solid rgba(79,70,229,0.14);border-radius:20px;padding:3px;gap:2px;flex-shrink:0;
+}
+.lang-btn{
+  font-family:var(--font);font-size:11px;font-weight:800;border:none;background:none;cursor:pointer;
+  padding:5px 10px;border-radius:16px;color:var(--txtM);transition:all .2s cubic-bezier(.34,1.2,.64,1);
+}
+.lang-btn.active{background:var(--acc-grad);color:#fff;box-shadow:0 2px 8px rgba(79,70,229,0.35)}
+.login-lang-toggle{position:absolute;top:18px;right:18px;z-index:2}
+@media(max-width:600px){
+  .login-lang-toggle{top:12px;right:12px}
+  .lang-btn{padding:4px 8px;font-size:10px}
+}
 </style>
 </head>
 <body>
 
 <!-- LOGIN SCREEN -->
 <div id="login-screen">
+  <div class="login-lang-toggle lang-toggle" id="login-lang-toggle">
+    <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">বাং</button>
+  </div>
   <div class="login-box">
     <div class="login-logo">
       <div class="login-logo-ico"><i class="ti ti-coin"></i></div>
       <div>
-        <div class="login-logo-name">Flat — Expense Tracker</div>
-        <div class="login-logo-tag">Track Spending</div>
+        <div class="login-logo-name">Flat Expense</div>
+        <div class="login-logo-tag" data-i18n="tagTrack">Track Spending</div>
       </div>
     </div>
-    <div class="login-title">Welcome back</div>
-    <div class="login-sub">Sign in to your account</div>
+    <div class="login-title" data-i18n="welcomeBack">Welcome</div>
+    <div class="login-sub" data-i18n="signInSub">Sign in to your account</div>
     <div id="login-flash"></div>
-    <div class="ff"><label>Username</label><input type="text" id="li-user" placeholder="Enter username" autocomplete="username" autocapitalize="none"></div>
-    <div class="ff" style="margin-bottom:0"><label>Password</label>
+    <div class="ff"><label data-i18n="username">Username</label><input type="text" id="li-user" data-i18n-ph="enterUsername" placeholder="Enter username" autocomplete="username" autocapitalize="none"></div>
+    <div class="ff" style="margin-bottom:0"><label data-i18n="password">Password</label>
       <div style="position:relative">
-        <input type="password" id="li-pass" placeholder="Enter password" autocomplete="current-password" style="padding-right:42px" onkeydown="if(event.key==='Enter')doLogin()">
+        <input type="password" id="li-pass" data-i18n-ph="enterPassword" placeholder="Enter password" autocomplete="current-password" style="padding-right:42px" onkeydown="if(event.key==='Enter')doLogin()">
         <button onclick="togglePw()" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--txtD);font-size:18px;display:flex;align-items:center" id="pw-eye"><i class="ti ti-eye"></i></button>
       </div>
     </div>
-    <button class="btn bp" style="margin-top:18px" onclick="doLogin()"><i class="ti ti-login"></i>Sign in</button>
+    <button class="btn bp" style="margin-top:18px" onclick="doLogin()"><i class="ti ti-login"></i><span data-i18n="signIn">Sign in</span></button>
   </div>
 </div>
 
@@ -519,29 +584,33 @@ body::before{
     <div class="logo-ico" style="padding:0;overflow:hidden"><img src="data:image/png;base64,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16hup1chx416jY+E8L2vKdzSOAcf8vzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8vzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8AL843tKGa7qdXIceNeobqdXIceNeocJ4XteU7jgHH/L843tKGa7qdXIceNeobqdXIceNeocJ4XteU7jgHH/L843tKGa7qdXIceNeobqdXIceNeocJ4XteU7jgHH/L843tKGa7qdXIceNeobqdXIceNeocJ4XteU7jgHH/AC/ON7Shmu6nVyHHjXqG6nVyHHjXqHCeF7XlO44Bx/y/ON7Shmu6nVyHHjXqG6nVyHHjXqHCeF7XlO44Bx/y/ON7Shmu6nVyHHjXqG6nVyHHjXqHCeF7XlO44Bx/y/ON7Shmu6nVyHHjXqG6nVyHHjXqHCeF7XlO44Bx/wAvzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8vzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8vzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8vzje0oZrup1chx416hup1chx416hwnhe15TuOAcf8AL843mzf2WUc17zGbLJptpTOks4SZwMYX2tt//t2+222170auxVtr2Ou03b9VdE+ydGxumU2LmHwlFu5GiY07ZAERYgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP/9k=" style="width:100%;height:100%;object-fit:cover;border-radius:10px"></div>
     <div>
       <div class="logo-name">Flat Expense</div>
-      <div class="logo-tag">Track Expense</div>
+      <div class="logo-tag" data-i18n="tagTrack2">Track Expense</div>
     </div>
   </div>
   <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
     <div class="nav-desktop">
-      <button class="nb active" onclick="go('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
-      <button class="nb" onclick="go('funds')"><i class="ti ti-wallet"></i>Funds</button>
-      <button class="nb" onclick="go('expenses')"><i class="ti ti-receipt"></i>Expenses</button>
-      <button class="nb" onclick="go('categories')"><i class="ti ti-tag"></i>Categories</button>
+      <button class="nb active" onclick="go('dashboard')"><i class="ti ti-layout-dashboard"></i><span data-i18n="navDashboard">Dashboard</span></button>
+      <button class="nb" onclick="go('funds')"><i class="ti ti-wallet"></i><span data-i18n="navFunds">Funds</span></button>
+      <button class="nb" onclick="go('expenses')"><i class="ti ti-receipt"></i><span data-i18n="navExpenses">Expenses</span></button>
+      <button class="nb" onclick="go('categories')"><i class="ti ti-tag"></i><span data-i18n="navCategories">Categories</span></button>
+    </div>
+    <div class="lang-toggle" id="topbar-lang-toggle">
+      <button class="lang-btn" data-lang="en" onclick="setLang('en')">EN</button>
+      <button class="lang-btn" data-lang="bn" onclick="setLang('bn')">বাং</button>
     </div>
     <div class="topbar-user">
       <div class="user-chip"><div class="user-avatar" id="topbar-avatar"></div><span id="topbar-uname"></span><span class="sync-dot" id="sync-dot" title="Synced"></span></div>
-      <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i><span class="logout-text">Logout</span></button>
+      <button class="logout-btn" onclick="doLogout()"><i class="ti ti-logout"></i><span class="logout-text" data-i18n="logout">Logout</span></button>
     </div>
   </div>
 </div>
 
 <!-- MOBILE TOP NAV -->
 <nav class="nav-mobile">
-  <button class="nb active" onclick="go('dashboard')"><i class="ti ti-layout-dashboard"></i>Dashboard</button>
-  <button class="nb" onclick="go('funds')"><i class="ti ti-wallet"></i>Funds</button>
-  <button class="nb" onclick="go('expenses')"><i class="ti ti-receipt"></i>Expenses</button>
-  <button class="nb" onclick="go('categories')"><i class="ti ti-tag"></i>Categories</button>
+  <button class="nb active" onclick="go('dashboard')"><i class="ti ti-layout-dashboard"></i><span data-i18n="navDashboard">Dashboard</span></button>
+  <button class="nb" onclick="go('funds')"><i class="ti ti-wallet"></i><span data-i18n="navFunds">Funds</span></button>
+  <button class="nb" onclick="go('expenses')"><i class="ti ti-receipt"></i><span data-i18n="navExpenses">Expenses</span></button>
+  <button class="nb" onclick="go('categories')"><i class="ti ti-tag"></i><span data-i18n="navCategories">Categories</span></button>
 </nav>
 
 <!-- PANELS -->
@@ -551,8 +620,8 @@ body::before{
   <div id="p-dashboard" class="panel active">
     <div class="mg" id="metrics"></div>
     <div class="g2">
-      <div class="card"><div class="ct"><i class="ti ti-chart-pie"></i>Spending by category</div><div id="cat-breakdown"></div></div>
-      <div class="card"><div class="ct"><i class="ti ti-clock"></i>Recent transactions</div><div id="recent-tx"></div></div>
+      <div class="card"><div class="ct"><i class="ti ti-chart-pie"></i><span data-i18n="spendingByCategory">Spending by category</span></div><div id="cat-breakdown"></div></div>
+      <div class="card"><div class="ct"><i class="ti ti-clock"></i><span data-i18n="recentTransactions">Recent transactions</span></div><div id="recent-tx"></div></div>
     </div>
   </div>
 
@@ -560,13 +629,13 @@ body::before{
   <div id="p-funds" class="panel">
     <div class="g2">
       <div class="card">
-        <div class="ct"><i class="ti ti-plus"></i>Add funds</div>
+        <div class="ct"><i class="ti ti-plus"></i><span data-i18n="addFunds">Add funds</span></div>
         <div id="fund-flash" class="fl"></div>
-        <div class="ff"><label>Amount (৳)</label><input type="number" id="fund-amt" placeholder="e.g. 25000" min="0" inputmode="decimal"></div>
-        <div class="ff"><label>Note</label><input type="text" id="fund-note" placeholder="e.g. New Amount"></div>
-        <button class="btn bp" onclick="saveFund()"><i class="ti ti-plus"></i>Add funds</button>
+        <div class="ff"><label data-i18n="amountLabel">Amount (৳)</label><input type="number" id="fund-amt" data-i18n-ph="fundAmtPh" placeholder="e.g. 25000" min="0" inputmode="decimal"></div>
+        <div class="ff"><label data-i18n="note">Note</label><input type="text" id="fund-note" data-i18n-ph="fundNotePh" placeholder="e.g. New Amount"></div>
+        <button class="btn bp" onclick="saveFund()"><i class="ti ti-plus"></i><span data-i18n="addFunds">Add funds</span></button>
       </div>
-      <div class="card"><div class="ct"><i class="ti ti-history"></i>Fund entries</div><div id="fund-list"></div></div>
+      <div class="card"><div class="ct"><i class="ti ti-history"></i><span data-i18n="fundEntries">Fund entries</span></div><div id="fund-list"></div></div>
     </div>
   </div>
 
@@ -574,24 +643,24 @@ body::before{
   <div id="p-categories" class="panel">
     <div class="g2">
       <div class="card">
-        <div class="ct"><i class="ti ti-plus"></i>New category</div>
+        <div class="ct"><i class="ti ti-plus"></i><span data-i18n="newCategory">New category</span></div>
         <div id="cat-flash" class="fl"></div>
-        <div class="ff"><label>Category name</label><input type="text" id="cat-name" placeholder="e.g. Groceries, Rent, Fuel"></div>
-        <div class="ff"><label>Color</label>
+        <div class="ff"><label data-i18n="categoryName">Category name</label><input type="text" id="cat-name" data-i18n-ph="catNamePh" placeholder="e.g. Groceries, Rent, Fuel"></div>
+        <div class="ff"><label data-i18n="color">Color</label>
           <select id="cat-color">
-            <option value="teal">🟢 Teal</option>
-            <option value="blue">🔵 Blue</option>
-            <option value="amber">🟡 Amber</option>
-            <option value="coral">🟠 Coral</option>
-            <option value="pink">🩷 Pink</option>
-            <option value="purple">🟣 Purple</option>
-            <option value="green">💚 Green</option>
+            <option value="teal" data-i18n="colorTeal">🟢 Teal</option>
+            <option value="blue" data-i18n="colorBlue">🔵 Blue</option>
+            <option value="amber" data-i18n="colorAmber">🟡 Amber</option>
+            <option value="coral" data-i18n="colorCoral">🟠 Coral</option>
+            <option value="pink" data-i18n="colorPink">🩷 Pink</option>
+            <option value="purple" data-i18n="colorPurple">🟣 Purple</option>
+            <option value="green" data-i18n="colorGreen">💚 Green</option>
           </select>
         </div>
-        <button class="btn bp" onclick="addCat()"><i class="ti ti-plus"></i>Add category</button>
+        <button class="btn bp" onclick="addCat()"><i class="ti ti-plus"></i><span data-i18n="addCategory">Add category</span></button>
       </div>
       <div class="card">
-        <div class="ct"><i class="ti ti-tags"></i>All categories</div>
+        <div class="ct"><i class="ti ti-tags"></i><span data-i18n="allCategories">All categories</span></div>
         <div id="cat-list"></div>
       </div>
     </div>
@@ -601,19 +670,19 @@ body::before{
   <div id="p-expenses" class="panel">
     <div class="g2">
       <div class="card">
-        <div class="ct"><i class="ti ti-plus"></i>Log an expense</div>
+        <div class="ct"><i class="ti ti-plus"></i><span data-i18n="logExpense">Log an expense</span></div>
         <div id="exp-flash" class="fl"></div>
         <div class="fr">
-          <div class="ff"><label>Category</label><select id="exp-cat"></select></div>
-          <div class="ff"><label>Amount (৳)</label><input type="number" id="exp-amt" placeholder="0" min="0" inputmode="decimal"></div>
+          <div class="ff"><label data-i18n="category">Category</label><select id="exp-cat"></select></div>
+          <div class="ff"><label data-i18n="amountLabel">Amount (৳)</label><input type="number" id="exp-amt" placeholder="0" min="0" inputmode="decimal"></div>
         </div>
         <div class="fr">
-          <div class="ff"><label>Date</label><input type="date" id="exp-date"></div>
-          <div class="ff"><label>Description</label><input type="text" id="exp-note" placeholder="Optional"></div>
+          <div class="ff"><label data-i18n="date">Date</label><input type="date" id="exp-date"></div>
+          <div class="ff"><label data-i18n="description">Description</label><input type="text" id="exp-note" data-i18n-ph="optional" placeholder="Optional"></div>
         </div>
-        <button class="btn bp" onclick="addExp()"><i class="ti ti-device-floppy"></i>Save expense</button>
+        <button class="btn bp" onclick="addExp()"><i class="ti ti-device-floppy"></i><span data-i18n="saveExpense">Save expense</span></button>
       </div>
-      <div class="card"><div class="ct"><i class="ti ti-list"></i>All expenses</div><div id="exp-list"></div></div>
+      <div class="card"><div class="ct"><i class="ti ti-list"></i><span data-i18n="allExpenses">All expenses</span></div><div id="exp-list"></div></div>
     </div>
   </div>
 
@@ -630,8 +699,8 @@ body::before{
     <div class="modal-title" id="modal-title">Delete this item?</div>
     <div class="modal-body" id="modal-body">This action cannot be undone.</div>
     <div class="modal-actions">
-      <button class="btn" onclick="closeModal()">Cancel</button>
-      <button class="btn" id="modal-confirm-btn" style="background:linear-gradient(135deg,#E11D48,#F43F5E);color:#fff;border:none;box-shadow:0 4px 14px rgba(220,38,38,0.30);transition:all .22s cubic-bezier(.34,1.2,.64,1)">Delete</button>
+      <button class="btn" onclick="closeModal()" data-i18n="cancel">Cancel</button>
+      <button class="btn" id="modal-confirm-btn" data-i18n="delete" style="background:linear-gradient(135deg,#E11D48,#F43F5E);color:#fff;border:none;box-shadow:0 4px 14px rgba(220,38,38,0.30);transition:all .22s cubic-bezier(.34,1.2,.64,1)">Delete</button>
     </div>
   </div>
 </div>
@@ -663,6 +732,134 @@ const C={
   green:{bg:'#DCFCE7',text:'#14532D',dot:'#22C55E'}
 };
 
+// ─── i18n ───
+const TR={
+  tagTrack:{en:'Track Spending',bn:'খরচ ট্র্যাক করুন'},
+  tagTrack2:{en:'Track Expense',bn:'খরচ ট্র্যাক করুন'},
+  welcomeBack:{en:'Welcome',bn:'স্বাগতম'},
+  signInSub:{en:'Sign in to your account',bn:'আপনার অ্যাকাউন্টে সাইন ইন করুন'},
+  username:{en:'Username',bn:'ইউজারনেম'},
+  password:{en:'Password',bn:'পাসওয়ার্ড'},
+  enterUsername:{en:'Enter username',bn:'ইউজারনেম লিখুন'},
+  enterPassword:{en:'Enter password',bn:'পাসওয়ার্ড লিখুন'},
+  signIn:{en:'Sign in',bn:'সাইন ইন'},
+  wrongLogin:{en:'Incorrect username or password.',bn:'ইউজারনেম বা পাসওয়ার্ড ভুল হয়েছে।'},
+  logout:{en:'Logout',bn:'লগআউট'},
+  navDashboard:{en:'Dashboard',bn:'ড্যাশবোর্ড'},
+  navFunds:{en:'Funds',bn:'ফান্ড'},
+  navExpenses:{en:'Expenses',bn:'খরচ'},
+  navCategories:{en:'Categories',bn:'ক্যাটেগরি'},
+  balance:{en:'Balance',bn:'ব্যালেন্স'},
+  totalFunds:{en:'Total funds',bn:'মোট ফান্ড'},
+  totalSpent:{en:'Total spent',bn:'মোট খরচ'},
+  budgetUsed:{en:'Budget used',bn:'বাজেট ব্যবহৃত'},
+  spendingByCategory:{en:'Spending by category',bn:'ক্যাটেগরি অনুযায়ী খরচ'},
+  recentTransactions:{en:'Recent transactions',bn:'সাম্প্রতিক লেনদেন'},
+  addFunds:{en:'Add funds',bn:'ফান্ড যোগ করুন'},
+  fundEntries:{en:'Fund entries',bn:'ফান্ড এন্ট্রি'},
+  amountLabel:{en:'Amount (৳)',bn:'পরিমাণ (৳)'},
+  note:{en:'Note',bn:'নোট'},
+  fundAmtPh:{en:'e.g. 25000',bn:'যেমন ২৫০০০'},
+  fundNotePh:{en:'e.g. New Amount',bn:'যেমন নতুন পরিমাণ'},
+  newCategory:{en:'New category',bn:'নতুন ক্যাটেগরি'},
+  categoryName:{en:'Category name',bn:'ক্যাটেগরির নাম'},
+  catNamePh:{en:'e.g. Groceries, Rent, Fuel',bn:'যেমন বাজার, ভাড়া, জ্বালানি'},
+  color:{en:'Color',bn:'রঙ'},
+  colorTeal:{en:'🟢 Teal',bn:'🟢 টিল'},
+  colorBlue:{en:'🔵 Blue',bn:'🔵 নীল'},
+  colorAmber:{en:'🟡 Amber',bn:'🟡 অ্যাম্বার'},
+  colorCoral:{en:'🟠 Coral',bn:'🟠 কোরাল'},
+  colorPink:{en:'🩷 Pink',bn:'🩷 গোলাপি'},
+  colorPurple:{en:'🟣 Purple',bn:'🟣 বেগুনি'},
+  colorGreen:{en:'💚 Green',bn:'💚 সবুজ'},
+  addCategory:{en:'Add category',bn:'ক্যাটেগরি যোগ করুন'},
+  allCategories:{en:'All categories',bn:'সব ক্যাটেগরি'},
+  logExpense:{en:'Log an expense',bn:'খরচ লিখুন'},
+  category:{en:'Category',bn:'ক্যাটেগরি'},
+  date:{en:'Date',bn:'তারিখ'},
+  description:{en:'Description',bn:'বিবরণ'},
+  optional:{en:'Optional',bn:'ঐচ্ছিক'},
+  saveExpense:{en:'Save expense',bn:'খরচ সংরক্ষণ করুন'},
+  allExpenses:{en:'All expenses',bn:'সব খরচ'},
+  cancel:{en:'Cancel',bn:'বাতিল'},
+  delete:{en:'Delete',bn:'মুছুন'},
+  deleteThisItem:{en:'Delete this item?',bn:'এই আইটেমটি মুছবেন?'},
+  cannotUndo:{en:'This action cannot be undone.',bn:'এই কাজটি ফিরিয়ে আনা যাবে না।'},
+  noCatGiven:{en:'Please enter a category name.',bn:'একটি ক্যাটেগরির নাম লিখুন।'},
+  catExists:{en:'Category already exists.',bn:'ক্যাটেগরিটি ইতিমধ্যে আছে।'},
+  catAdded:{en:'Category added successfully.',bn:'ক্যাটেগরি যোগ করা হয়েছে।'},
+  catDeleted:{en:'Category deleted.',bn:'ক্যাটেগরি মুছে ফেলা হয়েছে।'},
+  cantDeleteCat:{en:'Cannot delete — has linked expenses.',bn:'মুছা যাবে না — এই ক্যাটেগরিতে খরচ যুক্ত আছে।'},
+  cantDeleteCatN:{en:'Cannot delete',bn:'মুছা যাবে না'},
+  hasLinkedExp:{en:'expense(s) linked.',bn:'টি খরচ যুক্ত আছে।'},
+  expenseCount:{en:'expense',bn:'টি খরচ'},
+  expensesCount:{en:'expenses',bn:'টি খরচ'},
+  deleteCatQ:{en:'Delete',bn:'মুছবেন কি'},
+  catRemoved:{en:'This category will be permanently removed.',bn:'এই ক্যাটেগরিটি স্থায়ীভাবে মুছে যাবে।'},
+  fillRequired:{en:'Please fill in all required fields.',bn:'সব প্রয়োজনীয় তথ্য পূরণ করুন।'},
+  expenseSaved:{en:'Expense saved.',bn:'খরচ সংরক্ষিত হয়েছে।'},
+  deleteExpenseQ:{en:'Delete this expense?',bn:'এই খরচটি মুছবেন?'},
+  expenseRemoved:{en:'This expense will be permanently removed.',bn:'এই খরচটি স্থায়ীভাবে মুছে যাবে।'},
+  validAmount:{en:'Please enter a valid amount.',bn:'সঠিক পরিমাণ লিখুন।'},
+  fundsAdded:{en:'Funds added successfully.',bn:'ফান্ড যোগ করা হয়েছে।'},
+  fundsAddedDefault:{en:'Funds added',bn:'ফান্ড যোগ হয়েছে'},
+  deleteFundQ:{en:'Delete fund entry?',bn:'ফান্ড এন্ট্রি মুছবেন?'},
+  fundRemoved:{en:'This entry will be permanently removed.',bn:'এই এন্ট্রিটি স্থায়ীভাবে মুছে যাবে।'},
+  noEntries:{en:'No entries yet.',bn:'এখনো কোনো এন্ট্রি নেই।'},
+  noCategories:{en:'No categories yet.',bn:'এখনো কোনো ক্যাটেগরি নেই।'},
+  addCategoryFirst:{en:'— Add a category first —',bn:'— প্রথমে একটি ক্যাটেগরি যোগ করুন —'},
+  noExpenses:{en:'No expenses logged yet.',bn:'এখনো কোনো খরচ লেখা হয়নি।'},
+  noExpensesShow:{en:'No expenses to show.',bn:'দেখানোর মতো কোনো খরচ নেই।'},
+  noTransactions:{en:'No transactions yet.',bn:'এখনো কোনো লেনদেন নেই।'},
+  unknown:{en:'Unknown',bn:'অজানা'},
+  today:{en:'Today',bn:'আজ'},
+  yesterday:{en:'Yesterday',bn:'গতকাল'},
+  hiThere:{en:'Hi',bn:'হাই'},
+  dashOverview:{en:"Here's your spending overview",bn:'আপনার খরচের সারসংক্ষেপ'}
+};
+let L=sessionStorage.getItem('xtrk_lang')||'bn';
+function tr(key){const e=TR[key];return e?(e[L]||e.en):key;}
+function setLang(lang){
+  L=lang;sessionStorage.setItem('xtrk_lang',lang);
+  applyStaticI18n();
+  if(document.getElementById('main-app').style.display!=='none'){rDash();rFunds();rCats();rExpSel();rExps();}
+}
+function applyStaticI18n(){
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    el.textContent=tr(el.getAttribute('data-i18n'));
+  });
+  document.querySelectorAll('[data-i18n-ph]').forEach(el=>{
+    el.placeholder=tr(el.getAttribute('data-i18n-ph'));
+  });
+  document.querySelectorAll('.lang-btn').forEach(b=>{
+    b.classList.toggle('active',b.getAttribute('data-lang')===L);
+  });
+}
+const MONTHS_BN=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
+const DIGITS_BN=['০','১','২','৩','৪','৫','৬','৭','৮','৯'];
+function toBnDigits(n){return String(n).replace(/[0-9]/g,d=>DIGITS_BN[d]);}
+function fmtDateHead(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  const now=new Date();const today=now.toISOString().split('T')[0];
+  const y=new Date(now);y.setDate(y.getDate()-1);const yest=y.toISOString().split('T')[0];
+  if(dateStr===today)return `<i class="ti ti-calendar-event"></i>${tr('today')}`;
+  if(dateStr===yest)return `<i class="ti ti-calendar-event"></i>${tr('yesterday')}`;
+  if(L==='bn'){
+    return `<i class="ti ti-calendar"></i>${toBnDigits(d.getDate())} ${MONTHS_BN[d.getMonth()]}, ${toBnDigits(d.getFullYear())}`;
+  }
+  return `<i class="ti ti-calendar"></i>${d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'})}`;
+}
+function fmtDateShort(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  if(L==='bn')return `${toBnDigits(d.getDate())} ${MONTHS_BN[d.getMonth()]}`;
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short'});
+}
+function fmtDateLong(dateStr){
+  const d=new Date(dateStr+'T00:00:00');
+  if(L==='bn')return `${toBnDigits(d.getDate())} ${MONTHS_BN[d.getMonth()]}, ${toBnDigits(d.getFullYear())}`;
+  return d.toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
+}
+
 // ─── AUTH ───
 const USERS={
   arifa:{password:'arifa123',display:'Arifa'},
@@ -682,7 +879,7 @@ function doLogin(){
   const p=document.getElementById('li-pass').value;
   const fl=document.getElementById('login-flash');
   if(!USERS[u]||USERS[u].password!==p){
-    fl.innerHTML='<i class="ti ti-alert-circle"></i>Incorrect username or password.';
+    fl.innerHTML='<i class="ti ti-alert-circle"></i>'+tr('wrongLogin');
     fl.style.cssText='display:flex;align-items:center;gap:7px;font-size:12px;font-weight:700;padding:9px 12px;border-radius:8px;margin-bottom:14px;background:var(--red-bg);color:var(--red);border:1px solid rgba(220,38,38,0.18)';
     setTimeout(()=>{fl.style.display='none';},3000);
     document.getElementById('li-pass').value='';
@@ -696,6 +893,7 @@ function doLogin(){
 function showApp(u){
   document.getElementById('login-screen').style.display='none';
   document.getElementById('main-app').style.display='flex';
+  applyStaticI18n();
   document.getElementById('topbar-uname').textContent=USERS[u].display;
   document.getElementById('topbar-avatar').textContent=USERS[u].display[0];
   ls();
@@ -762,7 +960,10 @@ function go(t){
 }
 
 // ─── UTILS ───
-function money(n){return'৳'+Math.round(n).toLocaleString()}
+function money(n){
+  const s=Math.round(n).toLocaleString();
+  return'৳'+(L==='bn'?toBnDigits(s):s);
+}
 function flash(id,msg,type){
   const el=document.getElementById(id);if(!el)return;
   el.innerHTML=`<i class="ti ti-${type==='ok'?'circle-check':'alert-circle'}"></i>${msg}`;
@@ -784,25 +985,24 @@ document.getElementById('del-modal').addEventListener('click',function(e){if(e.t
 function saveFund(){
   const a=parseFloat(document.getElementById('fund-amt').value);
   const n=document.getElementById('fund-note').value.trim();
-  if(!a||a<=0){flash('fund-flash','Please enter a valid amount.','er');return;}
-  D.funds.push({id:Date.now(),amount:a,note:n||'Funds added',date:new Date().toISOString().split('T')[0]});
+  if(!a||a<=0){flash('fund-flash',tr('validAmount'),'er');return;}
+  D.funds.push({id:Date.now(),amount:a,note:n||tr('fundsAddedDefault'),date:new Date().toISOString().split('T')[0]});
   ss();
   document.getElementById('fund-amt').value='';
   document.getElementById('fund-note').value='';
-  rFunds();rDash();flash('fund-flash','Funds added successfully.','ok');
+  rFunds();rDash();flash('fund-flash',tr('fundsAdded'),'ok');
 }
 function delFund(id){
-  confirm('Delete fund entry?','This entry will be permanently removed.',()=>{
+  confirm(tr('deleteFundQ'),tr('fundRemoved'),()=>{
     D.funds=D.funds.filter(f=>f.id!==id);ss();rFunds();rDash();
   });
 }
 function rFunds(){
   const el=document.getElementById('fund-list');if(!el)return;
-  if(!D.funds.length){el.innerHTML='<div class="emp"><i class="ti ti-wallet-off"></i>No entries yet.</div>';return;}
+  if(!D.funds.length){el.innerHTML=`<div class="emp"><i class="ti ti-wallet-off"></i>${tr('noEntries')}</div>`;return;}
   el.innerHTML=[...D.funds].reverse().map(f=>{
-    const d=new Date(f.date).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'});
     return`<div class="tr">
-      <div><div class="tn">${f.note}</div><div class="tm">${d}</div></div>
+      <div><div class="tn">${f.note}</div><div class="tm">${fmtDateLong(f.date)}</div></div>
       <div style="display:flex;align-items:center;gap:6px">
         <span class="ta-g">${money(f.amount)}</span>
         <button class="db" onclick="delFund(${f.id})"><i class="ti ti-trash"></i></button>
@@ -815,24 +1015,24 @@ function rFunds(){
 function addCat(){
   const name=document.getElementById('cat-name').value.trim();
   const color=document.getElementById('cat-color').value;
-  if(!name){flash('cat-flash','Please enter a category name.','er');return;}
-  if(D.cats.find(c=>c.name.toLowerCase()===name.toLowerCase())){flash('cat-flash','Category already exists.','er');return;}
+  if(!name){flash('cat-flash',tr('noCatGiven'),'er');return;}
+  if(D.cats.find(c=>c.name.toLowerCase()===name.toLowerCase())){flash('cat-flash',tr('catExists'),'er');return;}
   D.cats.push({id:Date.now(),name,color});ss();
   document.getElementById('cat-name').value='';
-  rCats();rExpSel();flash('cat-flash','Category added successfully.','ok');
+  rCats();rExpSel();flash('cat-flash',tr('catAdded'),'ok');
 }
 function delCat(id){
   const cat=D.cats.find(c=>c.id===id);if(!cat)return;
   const expCount=D.exps.filter(e=>e.catId===id).length;
-  if(expCount>0){flash('cat-flash',`Cannot delete — "${cat.name}" has ${expCount} expense${expCount>1?'s':''} linked.`,'er');return;}
-  confirm(`Delete "${cat.name}"?`,'This category will be permanently removed.',()=>{
+  if(expCount>0){flash('cat-flash',`${tr('cantDeleteCatN')} — "${cat.name}" — ${expCount} ${tr('hasLinkedExp')}`,'er');return;}
+  confirm(`${tr('deleteCatQ')} "${cat.name}"?`,tr('catRemoved'),()=>{
     D.cats=D.cats.filter(c=>c.id!==id);ss();rCats();rExpSel();
-    flash('cat-flash','Category deleted.','ok');
+    flash('cat-flash',tr('catDeleted'),'ok');
   });
 }
 function rCats(){
   const el=document.getElementById('cat-list');if(!el)return;
-  if(!D.cats.length){el.innerHTML='<div class="emp"><i class="ti ti-tag-off"></i>No categories yet.</div>';return;}
+  if(!D.cats.length){el.innerHTML=`<div class="emp"><i class="ti ti-tag-off"></i>${tr('noCategories')}</div>`;return;}
   el.innerHTML=D.cats.map(c=>{
     const col=C[c.color]||C.teal;
     const expCount=D.exps.filter(e=>e.catId===c.id).length;
@@ -842,12 +1042,12 @@ function rCats(){
         <span class="dot" style="background:${col.dot};width:10px;height:10px;flex-shrink:0"></span>
         <div>
           <div class="cat-name">${c.name}</div>
-          ${hasExp?`<div style="font-size:10.5px;color:var(--txtD);font-weight:600">${expCount} expense${expCount>1?'s':''}</div>`:''}
+          ${hasExp?`<div style="font-size:10.5px;color:var(--txtD);font-weight:600">${expCount} ${expCount>1?tr('expensesCount'):tr('expenseCount')}</div>`:''}
         </div>
       </div>
       <div style="display:flex;align-items:center;gap:6px">
         <span class="bdg" style="background:${col.bg};color:${col.text}">${c.color}</span>
-        <button class="db" onclick="${hasExp?'flash(\'cat-flash\',\'Cannot delete — has linked expenses.\',\'er\')':'delCat('+c.id+')'}" style="${hasExp?'opacity:.38;cursor:not-allowed':''}">
+        <button class="db" onclick="${hasExp?`flash('cat-flash','${tr('cantDeleteCat')}','er')`:'delCat('+c.id+')'}" style="${hasExp?'opacity:.38;cursor:not-allowed':''}">
           <i class="ti ti-trash"></i>
         </button>
       </div>
@@ -861,46 +1061,59 @@ function rExpSel(){
   const cur=sel.value;
   sel.innerHTML=D.cats.length
     ?D.cats.map(c=>`<option value="${c.id}">${c.name}</option>`).join('')
-    :'<option value="">— Add a category first —</option>';
+    :`<option value="">${tr('addCategoryFirst')}</option>`;
   if(cur)sel.value=cur;
 }
 
-// ─── EXPENSES ───
+// ─── EXPENSES (grouped by date, newest date first) ───
 function addExp(){
   const catId=parseInt(document.getElementById('exp-cat').value);
   const amt=parseFloat(document.getElementById('exp-amt').value);
   const date=document.getElementById('exp-date').value;
   const note=document.getElementById('exp-note').value.trim();
-  if(!catId||!amt||amt<=0||!date){flash('exp-flash','Please fill in all required fields.','er');return;}
+  if(!catId||!amt||amt<=0||!date){flash('exp-flash',tr('fillRequired'),'er');return;}
   D.exps.push({id:Date.now(),catId,amount:amt,date,note});ss();
   document.getElementById('exp-amt').value='';
   document.getElementById('exp-note').value='';
-  rExps();rDash();flash('exp-flash','Expense saved.','ok');
+  rExps();rDash();flash('exp-flash',tr('expenseSaved'),'ok');
 }
 function delExp(id){
-  confirm('Delete this expense?','This expense will be permanently removed.',()=>{
+  confirm(tr('deleteExpenseQ'),tr('expenseRemoved'),()=>{
     D.exps=D.exps.filter(e=>e.id!==id);ss();rExps();rDash();
   });
 }
+function expRow(e){
+  const cat=D.cats.find(c=>c.id===e.catId)||{name:tr('unknown'),color:'teal'};
+  const col=C[cat.color]||C.teal;
+  return`<div class="tr">
+    <div style="min-width:0;flex:1;margin-right:8px">
+      <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+        <span class="bdg" style="background:${col.bg};color:${col.text}"><span class="dot" style="background:${col.dot}"></span>${cat.name}</span>
+        ${e.note?`<span style="font-size:11px;color:var(--txtD);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px">${e.note}</span>`:''}
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
+      <span class="ta-r">${money(e.amount)}</span>
+      <button class="db" onclick="delExp(${e.id})"><i class="ti ti-trash"></i></button>
+    </div>
+  </div>`;
+}
 function rExps(){
   const el=document.getElementById('exp-list');if(!el)return;
-  if(!D.exps.length){el.innerHTML='<div class="emp"><i class="ti ti-receipt-off"></i>No expenses logged yet.</div>';return;}
-  el.innerHTML=[...D.exps].sort((a,b)=>b.date.localeCompare(a.date)).map(e=>{
-    const cat=D.cats.find(c=>c.id===e.catId)||{name:'Unknown',color:'teal'};
-    const col=C[cat.color]||C.teal;
-    const d=new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
-    return`<div class="tr">
-      <div style="min-width:0;flex:1;margin-right:8px">
-        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
-          <span class="bdg" style="background:${col.bg};color:${col.text}"><span class="dot" style="background:${col.dot}"></span>${cat.name}</span>
-          ${e.note?`<span style="font-size:11px;color:var(--txtD);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:100px">${e.note}</span>`:''}
-        </div>
-        <div class="tm">${d}</div>
+  if(!D.exps.length){el.innerHTML=`<div class="emp"><i class="ti ti-receipt-off"></i>${tr('noExpenses')}</div>`;return;}
+  // group expenses by date so spending is easy to follow day by day
+  const groups={};
+  D.exps.forEach(e=>{(groups[e.date]=groups[e.date]||[]).push(e);});
+  const dates=Object.keys(groups).sort((a,b)=>b.localeCompare(a));
+  el.innerHTML=dates.map(date=>{
+    const items=[...groups[date]].sort((a,b)=>b.id-a.id);
+    const dayTotal=items.reduce((s,e)=>s+e.amount,0);
+    return`<div class="date-group">
+      <div class="date-head">
+        <span class="date-head-label">${fmtDateHead(date)}</span>
+        <span class="date-head-total">${money(dayTotal)}</span>
       </div>
-      <div style="display:flex;align-items:center;gap:6px;flex-shrink:0">
-        <span class="ta-r">${money(e.amount)}</span>
-        <button class="db" onclick="delExp(${e.id})"><i class="ti ti-trash"></i></button>
-      </div>
+      ${items.map(expRow).join('')}
     </div>`;
   }).join('');
 }
@@ -910,43 +1123,50 @@ function rDash(){
   const tf=D.funds.reduce((s,f)=>s+f.amount,0);
   const te=D.exps.reduce((s,e)=>s+e.amount,0);
   const rem=tf-te;
-  const pct=tf>0?Math.round((te/tf)*100):0;
+
   document.getElementById('metrics').innerHTML=`
-    <div class="mc"><div class="ml">Balance</div><div class="mv ${rem<0?'r':'g'}">${money(rem)}</div></div>
-    <div class="mc"><div class="ml">Total funds</div><div class="mv b">${money(tf)}</div></div>
-    <div class="mc"><div class="ml">Total spent</div><div class="mv r">${money(te)}</div></div>
-    <div class="mc"><div class="ml">Budget used</div><div class="mv">${pct}%</div></div>`;
+    <div class="mc mc-fund"><div class="ml">${tr('totalFunds')}</div><div class="mv b">${money(tf)}</div></div>
+    <div class="mc mc-spent"><div class="ml">${tr('totalSpent')}</div><div class="mv r">${money(te)}</div></div>
+    <div class="mc ${rem<0?'mc-bal-neg':'mc-bal-pos'}"><div class="ml">${tr('balance')}</div><div class="mv ${rem<0?'r':'g'}">${money(rem)}</div></div>`;
 
   const bd=document.getElementById('cat-breakdown');
-  if(!D.exps.length){bd.innerHTML='<div class="emp"><i class="ti ti-chart-pie-off"></i>No expenses to show.</div>';return;}
-  const bycat={};D.exps.forEach(e=>{bycat[e.catId]=(bycat[e.catId]||0)+e.amount;});
-  bd.innerHTML=Object.entries(bycat).sort((a,b)=>b[1]-a[1]).map(([cid,amt])=>{
-    const cat=D.cats.find(c=>c.id==cid)||{name:'Unknown',color:'teal'};
-    const col=C[cat.color]||C.teal;
-    const p=te>0?Math.round((amt/te)*100):0;
-    return`<div class="pw">
-      <div style="display:flex;justify-content:space-between;align-items:center">
-        <span class="bdg" style="background:${col.bg};color:${col.text}"><span class="dot" style="background:${col.dot}"></span>${cat.name}</span>
-        <span style="font-size:12px;font-weight:700;color:var(--txt)">${money(amt)} <span style="color:var(--txtD);font-weight:500">${p}%</span></span>
-      </div>
-      <div class="pb"><div class="pf" style="width:${p}%;background:${col.dot}"></div></div>
-    </div>`;
-  }).join('');
+  if(!D.exps.length){bd.innerHTML=`<div class="emp"><i class="ti ti-chart-pie-off"></i>${tr('noExpensesShow')}</div>`;}
+  else{
+    const bycat={};D.exps.forEach(e=>{bycat[e.catId]=(bycat[e.catId]||0)+e.amount;});
+    bd.innerHTML=Object.entries(bycat).sort((a,b)=>b[1]-a[1]).map(([cid,amt],idx)=>{
+      const cat=D.cats.find(c=>c.id==cid)||{name:tr('unknown'),color:'teal'};
+      const col=C[cat.color]||C.teal;
+      const p=te>0?Math.round((amt/te)*100):0;
+      const rankNum=L==='bn'?toBnDigits(idx+1):(idx+1);
+      return`<div class="pw">
+        <div class="pw-rank" style="background:${col.dot}">${rankNum}</div>
+        <div class="pw-body">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+            <span class="bdg" style="background:${col.bg};color:${col.text}"><span class="dot" style="background:${col.dot}"></span>${cat.name}</span>
+            <span style="font-size:12.5px;font-weight:800;color:var(--txt);flex-shrink:0">${money(amt)}</span>
+          </div>
+          <div class="pb"><div class="pf" style="width:${p}%;background:${col.dot}"></div></div>
+        </div>
+      </div>`;
+    }).join('');
+  }
 
   const rt=document.getElementById('recent-tx');
-  const recent=[...D.exps].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
-  if(!recent.length){rt.innerHTML='<div class="emp"><i class="ti ti-clock-off"></i>No transactions yet.</div>';return;}
+  const recent=[...D.exps].sort((a,b)=>b.date.localeCompare(a.date)||b.id-a.id).slice(0,5);
+  if(!recent.length){rt.innerHTML=`<div class="emp"><i class="ti ti-clock-off"></i>${tr('noTransactions')}</div>`;return;}
   rt.innerHTML=recent.map(e=>{
-    const cat=D.cats.find(c=>c.id===e.catId)||{name:'Unknown',color:'teal'};
+    const cat=D.cats.find(c=>c.id===e.catId)||{name:tr('unknown'),color:'teal'};
     const col=C[cat.color]||C.teal;
-    const d=new Date(e.date).toLocaleDateString('en-GB',{day:'numeric',month:'short'});
     return`<div class="tr">
-      <div style="min-width:0;flex:1;margin-right:6px">
-        <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
-          <span class="bdg" style="background:${col.bg};color:${col.text}"><span class="dot" style="background:${col.dot}"></span>${cat.name}</span>
-          ${e.note?`<span style="font-size:11px;color:var(--txtD);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">${e.note}</span>`:''}
+      <div style="display:flex;align-items:center;gap:10px;min-width:0;flex:1;margin-right:6px">
+        <div class="tx-avatar" style="background:${col.dot}">${(cat.name||'?').trim().charAt(0).toUpperCase()}</div>
+        <div style="min-width:0">
+          <div style="display:flex;align-items:center;gap:5px;flex-wrap:wrap">
+            <span style="font-size:12.5px;font-weight:700;color:var(--txt)">${cat.name}</span>
+            ${e.note?`<span style="font-size:11px;color:var(--txtD);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:80px">· ${e.note}</span>`:''}
+          </div>
+          <div class="tm">${fmtDateShort(e.date)}</div>
         </div>
-        <div class="tm">${d}</div>
       </div>
       <span class="ta-r">${money(e.amount)}</span>
     </div>`;
@@ -965,6 +1185,10 @@ window.delCat=delCat;
 window.addExp=addExp;
 window.delExp=delExp;
 window.closeModal=closeModal;
+window.setLang=setLang;
+
+// ─── INITIAL LANGUAGE APPLY (login screen too) ───
+applyStaticI18n();
 
 // ─── AUTO LOGIN (session restore) ───
 (function(){
