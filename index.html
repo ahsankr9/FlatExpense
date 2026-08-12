@@ -303,33 +303,105 @@ body::before{
 @media(max-width:400px){.fr{grid-template-columns:1fr}}
 
 /* ══════════════════════════════
-   NOTEPAD (ruled paper + line numbers)
+   NOTEPAD (multi-note, list + editor)
 ══════════════════════════════ */
-.note-editor{
-  display:flex;align-items:stretch;
+.note-add-btn{
+  margin-left:auto;flex-shrink:0;width:30px;height:30px;border-radius:9px;border:none;
+  background:var(--acc-grad);color:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 3px 8px rgba(79,70,229,.35);transition:all .18s;font-size:15px;
+}
+.note-add-btn:hover{transform:translateY(-1px) scale(1.05)}
+.note-add-btn:active{transform:scale(.92)}
+.note-fab{
+  position:fixed;right:22px;bottom:calc(22px + env(safe-area-inset-bottom));
+  width:58px;height:58px;border-radius:50%;border:none;
+  background:var(--acc-grad);color:#fff;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;box-shadow:0 8px 22px rgba(79,70,229,.45),0 2px 6px rgba(0,0,0,.12);
+  font-size:30px;font-weight:400;line-height:1;z-index:150;transition:transform .18s cubic-bezier(.34,1.4,.64,1);
+}
+.note-fab span{margin-top:-3px}
+.note-fab:hover{transform:translateY(-2px) scale(1.05)}
+.note-fab:active{transform:scale(.90)}
+@media(max-width:600px){
+  .note-fab{right:16px;bottom:calc(78px + env(safe-area-inset-bottom))}
+}
+.note-item{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:13px 12px;border-radius:12px;cursor:pointer;
+  border:1.5px solid var(--bord);background:var(--surf2);
+  margin-bottom:10px;transition:all .18s cubic-bezier(.34,1.2,.64,1);
+}
+.note-item:hover{border-color:var(--bordH);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.note-item:last-child{margin-bottom:0}
+.note-item-body{min-width:0;flex:1}
+.note-item-title{font-size:13.5px;font-weight:800;color:var(--txt);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.note-item-snip{font-size:11.5px;color:var(--txtM);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:500}
+.note-item-meta{font-size:10px;color:var(--txtD);margin-top:6px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.note-item-del{
+  flex-shrink:0;width:34px;height:34px;border-radius:10px;border:1.5px solid var(--bord);
+  background:var(--surf);color:var(--txtD);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all .18s;font-size:14px;
+}
+.note-item-del:hover{background:var(--red-bg);border-color:rgba(225,29,72,.3);color:var(--red)}
+
+.note-back-btn,.note-del-btn{
+  width:38px;height:38px;border-radius:11px;border:1.5px solid var(--bord);background:var(--surf);
+  color:var(--txtM);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:all .18s;font-size:15px;
+}
+.note-back-btn:hover{background:rgba(79,70,229,.06);border-color:var(--acc1);color:var(--acc1)}
+.note-del-btn:hover{background:var(--red-bg);border-color:rgba(225,29,72,.3);color:var(--red)}
+.note-title-input{
+  width:100%;font-size:16px;font-weight:800;font-family:var(--font);
   background:var(--bg);border:1.5px solid var(--bord);border-radius:var(--r-sm);
-  overflow:hidden;transition:all .15s;min-height:360px;
+  padding:12px 13px;color:var(--txt);outline:none;margin-bottom:12px;transition:all .15s;
 }
-.note-editor:focus-within{border-color:var(--acc1);background:#fff;box-shadow:0 0 0 3px rgba(79,70,229,0.10)}
-.note-linenums{
-  flex-shrink:0;width:42px;padding:14px 8px 14px 0;
-  font-family:'Courier New',monospace;font-size:13px;line-height:26px;
-  color:var(--txtD);text-align:right;user-select:none;
-  background:rgba(79,70,229,0.05);border-right:1.5px solid var(--bord);
-  overflow:hidden;white-space:pre;box-sizing:border-box;
+.note-title-input::placeholder{color:var(--txtD);font-weight:700}
+.note-title-input:focus{border-color:var(--acc1);background:#fff;box-shadow:0 0 0 3px rgba(79,70,229,0.10)}
+.note-toolbar{display:flex;gap:8px;margin-bottom:10px}
+.ntb{
+  width:40px;height:40px;border-radius:10px;border:1.5px solid var(--bord);background:var(--surf2);
+  color:var(--txtM);display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:16px;transition:all .18s;
 }
-#note-text{
-  flex:1;min-width:0;font-size:14.5px;font-family:var(--font);font-weight:500;
-  background:
-    repeating-linear-gradient(to bottom,transparent 0,transparent 25px,rgba(79,70,229,0.16) 25px,rgba(79,70,229,0.16) 26px);
-  background-color:transparent;
+.ntb:hover{border-color:var(--acc1);color:var(--acc1);background:rgba(79,70,229,.06)}
+.ntb:active{transform:scale(.92)}
+.note-editor-wrap{
+  position:relative;width:100%;
+  background-color:var(--bg);
+  background-image:repeating-linear-gradient(
+    to bottom,
+    transparent 0px,
+    transparent 25px,
+    rgba(79,70,229,0.22) 25px,
+    rgba(79,70,229,0.22) 26px
+  );
   background-position:0 14px;
-  border:none;padding:14px;color:var(--txt);outline:none;
-  resize:vertical;line-height:26px;box-sizing:border-box;
+  background-repeat:repeat-y;
+  border:1.5px solid var(--bord);border-radius:var(--r-sm);
+  transition:border-color .15s,box-shadow .15s;
 }
-#note-text::placeholder{color:var(--txtD);font-weight:500}
+.note-editor-wrap:focus-within{border-color:var(--acc1);background-color:#fff;box-shadow:0 0 0 3px rgba(79,70,229,0.10)}
+.note-backdrop{
+  position:absolute;top:0;left:0;right:0;bottom:0;
+  padding:14px;font-size:14.5px;font-family:var(--font);font-weight:500;line-height:26px;
+  white-space:pre-wrap;word-wrap:break-word;overflow-wrap:break-word;
+  color:transparent;pointer-events:none;overflow:hidden;box-sizing:border-box;
+}
+.note-backdrop .struck{
+  text-decoration-line:line-through;text-decoration-color:var(--txtD);
+  text-decoration-thickness:1.6px;text-decoration-skip-ink:none;
+}
+.note-plain-text{
+  position:relative;z-index:1;
+  width:100%;min-height:320px;font-size:14.5px;font-family:var(--font);font-weight:500;
+  background:transparent;border:none;border-radius:var(--r-sm);
+  padding:14px;color:var(--txt);outline:none;resize:vertical;line-height:26px;
+  white-space:pre-wrap;transition:color .15s;box-sizing:border-box;
+}
+.note-plain-text::placeholder{color:var(--txtD);font-weight:500}
 @media(max-width:400px){
-  .note-linenums{width:34px;font-size:12px}
+  .note-plain-text,.note-backdrop{min-height:280px}
 }
 
 /* ══════════════════════════════
@@ -752,16 +824,37 @@ body::before{
 
   <!-- NOTEPAD -->
   <div id="p-notepad" class="panel">
-    <div class="card">
-      <div class="ct"><i class="ti ti-notebook"></i><span data-i18n="notepadTitle">Notepad</span></div>
-      <div id="note-flash" class="fl"></div>
-      <div class="note-editor">
-        <div class="note-linenums" id="note-linenums">1</div>
-        <textarea id="note-text" data-i18n-ph="notepadPh" placeholder="Write your notes here..." oninput="onNoteInput()" onscroll="syncNoteScroll()" spellcheck="false"></textarea>
+    <div class="card" id="note-list-card">
+      <div class="ct">
+        <i class="ti ti-notebook"></i><span data-i18n="notepadTitle">Notepad</span>
+        <button class="note-add-btn" onclick="newNote()" data-i18n-title="newNote" title="New note"><span style="font-size:19px;line-height:1;margin-top:-2px">+</span></button>
       </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:12px;flex-wrap:wrap">
+      <div class="ff" style="margin-bottom:14px">
+        <input type="text" id="note-search" data-i18n-ph="searchNotes" placeholder="Search notes..." oninput="rNoteList()">
+      </div>
+      <div id="note-list"></div>
+    </div>
+    <button class="note-fab" id="note-fab" onclick="newNote()" data-i18n-title="newNote" title="New note"><span>+</span></button>
+
+    <div class="card" id="note-editor-card" style="display:none">
+      <div style="display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px">
+        <button class="note-back-btn" onclick="closeNoteEditor()"><i class="ti ti-arrow-left"></i></button>
+        <button class="note-del-btn" onclick="deleteActiveNote()"><i class="ti ti-trash"></i></button>
+      </div>
+      <div id="note-flash" class="fl"></div>
+      <input type="text" id="note-title-input" class="note-title-input" data-i18n-ph="noteTitlePh" placeholder="Note title" oninput="onNoteInput()">
+      <div class="note-toolbar">
+        <button type="button" class="ntb" onclick="applyListFormat('bullet')" data-i18n-title="bulletList" title="Bullet list"><i class="ti ti-list"></i></button>
+        <button type="button" class="ntb" onclick="applyListFormat('number')" data-i18n-title="numberedList" title="Numbered list"><i class="ti ti-list-numbers"></i></button>
+        <button type="button" class="ntb" onclick="applyListFormat('todo')" data-i18n-title="todoList" title="To-do checklist"><i class="ti ti-list-check"></i></button>
+        <button type="button" class="ntb" onclick="applyListFormat('strike')" data-i18n-title="strikeText" title="Strikethrough"><i class="ti ti-strikethrough"></i></button>
+      </div>
+      <div class="note-editor-wrap">
+        <div id="note-backdrop" class="note-backdrop" aria-hidden="true"></div>
+        <textarea id="note-text" class="note-plain-text" data-i18n-ph="notepadPh" placeholder="Write your notes here..." oninput="onNoteInput()" onclick="onNoteClick(event)" onkeydown="onNoteKeydown(event)" spellcheck="false"></textarea>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:flex-end;gap:10px;margin-top:12px;flex-wrap:wrap">
         <div id="note-saved-info" style="font-size:11px;color:var(--txtD);font-weight:600;display:flex;align-items:center;gap:5px"></div>
-        <button class="btn bp" style="width:auto;margin-top:0;padding:10px 22px" onclick="saveNote()"><i class="ti ti-device-floppy"></i><span data-i18n="saveNote">Save note</span></button>
       </div>
     </div>
   </div>
@@ -903,7 +996,19 @@ const TR={
   saveNote:{en:'Save note',bn:'নোট সংরক্ষণ করুন'},
   noteSaved:{en:'Note saved.',bn:'নোট সংরক্ষিত হয়েছে।'},
   lastSaved:{en:'Last saved at',bn:'সর্বশেষ সংরক্ষণ'},
-  autoSaving:{en:'Saving…',bn:'সংরক্ষণ হচ্ছে…'}
+  autoSaving:{en:'Saving…',bn:'সংরক্ষণ হচ্ছে…'},
+  newNote:{en:'New note',bn:'নতুন নোট'},
+  searchNotes:{en:'Search notes...',bn:'নোট খুঁজুন...'},
+  noteTitlePh:{en:'Note title',bn:'নোটের শিরোনাম'},
+  bulletList:{en:'Bullet list',bn:'বুলেট লিস্ট'},
+  numberedList:{en:'Numbered list',bn:'নাম্বারিং লিস্ট'},
+  todoList:{en:'To-do checklist',bn:'টু-ডু চেকলিস্ট'},
+  strikeText:{en:'Strikethrough',bn:'কেটে দাও'},
+  untitledNote:{en:'Untitled note',bn:'শিরোনামহীন নোট'},
+  noNotes:{en:'No notes yet. Tap + to create one.',bn:'এখনো কোনো নোট নেই। তৈরি করতে + বাটনে চাপুন।'},
+  noNotesFound:{en:'No matching notes found.',bn:'কোনো মিলযুক্ত নোট পাওয়া যায়নি।'},
+  deleteNoteQ:{en:'Delete this note?',bn:'এই নোটটি মুছবেন?'},
+  noteRemoved:{en:'This note will be permanently removed.',bn:'এই নোটটি স্থায়ীভাবে মুছে যাবে।'}
 };
 let L=sessionStorage.getItem('xtrk_lang')||'bn';
 function tr(key){const e=TR[key];return e?(e[L]||e.en):key;}
@@ -997,8 +1102,9 @@ function showApp(u){
 function doLogout(){
   if(dbListener){off(ref(db,'shared/data'),dbListener);dbListener=null;}
   currentUser=null;
+  activeNoteId=null;
   sessionStorage.removeItem('xtrk_user');
-  D={funds:[],cats:[],exps:[],notes:''};
+  D={funds:[],cats:[],exps:[],notes:[]};
   document.getElementById('main-app').style.display='none';
   document.getElementById('login-screen').style.display='flex';
   document.getElementById('li-user').value='';
@@ -1006,7 +1112,13 @@ function doLogout(){
 }
 
 // ─── DATA (per-user) ───
-let D={funds:[],cats:[],exps:[],notes:''};
+let D={funds:[],cats:[],exps:[],notes:[]};
+function normalizeNotes(n){
+  if(Array.isArray(n))return n.filter(x=>x!=null);
+  if(n&&typeof n==='object')return Object.values(n).filter(x=>x!=null);
+  if(typeof n==='string'&&n.trim())return[{id:Date.now(),title:'',content:n,updated:new Date().toISOString()}];
+  return[];
+}
 function ls(){
   // Firebase realtime listener — shared data for all users
   if(dbListener){off(ref(db,'shared/data'),dbListener);dbListener=null;}
@@ -1015,9 +1127,9 @@ function ls(){
     const val=snap.val();
     if(val){
       const toArr=v=>{if(!v)return[];if(Array.isArray(v))return v.filter(x=>x!=null);return Object.values(v);};
-      D={funds:toArr(val.funds),cats:toArr(val.cats),exps:toArr(val.exps),notes:(val.notes||'')};
+      D={funds:toArr(val.funds),cats:toArr(val.cats),exps:toArr(val.exps),notes:normalizeNotes(val.notes)};
     } else {
-      D={funds:[],cats:[],exps:[],notes:''};
+      D={funds:[],cats:[],exps:[],notes:[]};
     }
     rDash();rFunds();rCats();rExpSel();rExps();rNotepad();
   });
@@ -1207,46 +1319,253 @@ function rExps(){
   }).join('');
 }
 
-// ─── NOTEPAD (ruled paper + line numbers) ───
+// ─── NOTEPAD (multi-note, list + editor, with bullet/numbered/to-do lists) ───
+let activeNoteId=null;
 let noteSaveTimer=null;
-function updateNoteLineNumbers(){
-  const ta=document.getElementById('note-text');
-  const ln=document.getElementById('note-linenums');
-  if(!ta||!ln)return;
-  const total=(ta.value.match(/\n/g)||[]).length+1;
-  const useBn=L==='bn';
-  let out='';
-  for(let i=1;i<=total;i++){out+=(useBn?toBnDigits(i):i)+'\n';}
-  ln.textContent=out;
-  ln.scrollTop=ta.scrollTop;
+
+function ensureNotesArray(){ if(!Array.isArray(D.notes)) D.notes=normalizeNotes(D.notes); }
+
+function escapeHtml(s){
+  return String(s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
-function syncNoteScroll(){
-  const ta=document.getElementById('note-text');
-  const ln=document.getElementById('note-linenums');
-  if(ta&&ln)ln.scrollTop=ta.scrollTop;
+function cleanSnippet(text){
+  const line=(text||'').split('\n').map(l=>l.replace(/^(\s*)(•|☐|☑|\d+\.)\s?/,'$1')).find(l=>l.trim().length)||'';
+  return line.trim().slice(0,90);
 }
+function fmtNoteDate(d){
+  const now=new Date();
+  const timeStr=d.toLocaleTimeString(L==='bn'?'bn-BD':'en-GB',{hour:'2-digit',minute:'2-digit'});
+  if(d.toDateString()===now.toDateString())return `${tr('today')} · ${timeStr}`;
+  const y=new Date(now);y.setDate(y.getDate()-1);
+  if(d.toDateString()===y.toDateString())return `${tr('yesterday')} · ${timeStr}`;
+  const dateStr=L==='bn'?`${toBnDigits(d.getDate())} ${MONTHS_BN[d.getMonth()]}`:`${d.getDate()} ${d.toLocaleString('en',{month:'short'})}`;
+  return `${dateStr} · ${timeStr}`;
+}
+
+function rNoteList(){
+  ensureNotesArray();
+  const list=document.getElementById('note-list');
+  if(!list)return;
+  const q=(document.getElementById('note-search')?.value||'').trim().toLowerCase();
+  let notes=[...D.notes].sort((a,b)=>(b.updated||'').localeCompare(a.updated||''));
+  if(q)notes=notes.filter(n=>(n.title||'').toLowerCase().includes(q)||(n.content||'').toLowerCase().includes(q));
+  if(!notes.length){
+    list.innerHTML=`<div class="emp"><i class="ti ti-notes-off"></i>${tr(D.notes.length?'noNotesFound':'noNotes')}</div>`;
+    return;
+  }
+  list.innerHTML=notes.map(n=>{
+    const title=n.title&&n.title.trim()?n.title:tr('untitledNote');
+    const snip=cleanSnippet(n.content);
+    const dateStr=n.updated?fmtNoteDate(new Date(n.updated)):'';
+    return `<div class="note-item" onclick="openNote(${n.id})">
+      <div class="note-item-body">
+        <div class="note-item-title">${escapeHtml(title)}</div>
+        ${snip?`<div class="note-item-snip">${escapeHtml(snip)}</div>`:''}
+        <div class="note-item-meta">${dateStr}</div>
+      </div>
+      <button class="note-item-del" onclick="event.stopPropagation();confirmDeleteNote(${n.id})"><i class="ti ti-trash"></i></button>
+    </div>`;
+  }).join('');
+}
+
+function newNote(){
+  ensureNotesArray();
+  const n={id:Date.now(),title:'',content:'',updated:new Date().toISOString()};
+  D.notes.push(n);
+  openNote(n.id,true);
+}
+
+function openNote(id,isNew){
+  ensureNotesArray();
+  activeNoteId=id;
+  const n=D.notes.find(x=>x.id===id);
+  if(!n)return;
+  document.getElementById('note-list-card').style.display='none';
+  document.getElementById('note-editor-card').style.display='block';
+  const fabEl0=document.getElementById('note-fab');if(fabEl0)fabEl0.style.display='none';
+  document.getElementById('note-title-input').value=n.title||'';
+  document.getElementById('note-text').value=n.content||'';
+  renderNoteBackdrop();
+  const infoEl=document.getElementById('note-saved-info');
+  if(infoEl)infoEl.innerHTML=n.updated?`<i class="ti ti-circle-check" style="color:var(--green)"></i>${tr('lastSaved')} ${fmtNoteDate(new Date(n.updated))}`:'';
+  const flashEl=document.getElementById('note-flash');
+  if(flashEl){flashEl.style.display='none';flashEl.className='fl';}
+  if(isNew)setTimeout(()=>{const ti=document.getElementById('note-title-input');if(ti)ti.focus();},50);
+}
+
+function closeNoteEditor(){
+  activeNoteId=null;
+  document.getElementById('note-editor-card').style.display='none';
+  document.getElementById('note-list-card').style.display='block';
+  const fabEl1=document.getElementById('note-fab');if(fabEl1)fabEl1.style.display='flex';
+  rNoteList();
+}
+
+function confirmDeleteNote(id){
+  const n=D.notes.find(x=>x.id===id);
+  if(!n)return;
+  confirm(tr('deleteNoteQ'),tr('noteRemoved'),()=>{
+    D.notes=D.notes.filter(x=>x.id!==id);
+    ss();
+    if(activeNoteId===id)closeNoteEditor();else rNoteList();
+  });
+}
+function deleteActiveNote(){ if(activeNoteId!=null)confirmDeleteNote(activeNoteId); }
+
+function escHtml(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+
+// ── render the strikethrough backdrop behind the textarea ──
+// checked to-do lines (starting with ☑) get a real line-through drawn
+// over invisible mirrored text, so the crossed-out look shows live.
+function renderNoteBackdrop(){
+  const ta=document.getElementById('note-text');
+  const bd=document.getElementById('note-backdrop');
+  if(!ta||!bd)return;
+  const lines=ta.value.split('\n');
+  bd.innerHTML=lines.map(l=>{
+    const checked=/^\s*☑\s/.test(l);
+    const esc=escHtml(l);
+    return checked?`<span class="struck">${esc}</span>`:esc;
+  }).join('\n');
+  bd.scrollTop=ta.scrollTop;
+  bd.scrollLeft=ta.scrollLeft;
+}
+
 function onNoteInput(){
-  updateNoteLineNumbers();
+  renderNoteBackdrop();
   const infoEl=document.getElementById('note-saved-info');
   if(infoEl)infoEl.innerHTML=`<i class="ti ti-clock" style="color:var(--txtD)"></i>${tr('autoSaving')}`;
   clearTimeout(noteSaveTimer);
-  noteSaveTimer=setTimeout(()=>{saveNote(true);},1200);
+  noteSaveTimer=setTimeout(()=>{saveActiveNote();},900);
 }
-function saveNote(silent){
-  const ta=document.getElementById('note-text');if(!ta)return;
-  D.notes=ta.value;
+function saveActiveNote(){
+  if(activeNoteId==null)return;
+  const n=D.notes.find(x=>x.id===activeNoteId);
+  if(!n)return;
+  const ti=document.getElementById('note-title-input');
+  const ta=document.getElementById('note-text');
+  n.title=ti?ti.value:n.title;
+  n.content=ta?ta.value:n.content;
+  n.updated=new Date().toISOString();
   ss();
-  const now=new Date();
-  const timeStr=now.toLocaleTimeString(L==='bn'?'bn-BD':'en-GB',{hour:'2-digit',minute:'2-digit'});
   const infoEl=document.getElementById('note-saved-info');
-  if(infoEl)infoEl.innerHTML=`<i class="ti ti-circle-check" style="color:var(--green)"></i>${tr('lastSaved')} ${timeStr}`;
-  if(!silent)flash('note-flash',tr('noteSaved'),'ok');
+  if(infoEl)infoEl.innerHTML=`<i class="ti ti-circle-check" style="color:var(--green)"></i>${tr('lastSaved')} ${fmtNoteDate(new Date(n.updated))}`;
 }
-function rNotepad(){
+
+// ── list formatting toolbar (bullet / numbered / to-do) ──
+function applyListFormat(type){
   const ta=document.getElementById('note-text');
   if(!ta)return;
-  if(document.activeElement!==ta){ta.value=D.notes||'';}
-  updateNoteLineNumbers();
+  ta.focus();
+  const val=ta.value;
+  const selStart=ta.selectionStart, selEnd=ta.selectionEnd;
+  const blockStart=val.lastIndexOf('\n',selStart-1)+1;
+  let endProbe=selEnd;
+  if(endProbe>selStart&&val[endProbe-1]==='\n')endProbe--;
+  let blockEnd=val.indexOf('\n',endProbe);
+  if(blockEnd===-1)blockEnd=val.length;
+
+  const block=val.slice(blockStart,blockEnd);
+  const lines=block.split('\n');
+  const stripPrefix=l=>l.replace(/^(\s*)(•\s|☐\s|☑\s|\d+\.\s)/,'$1');
+
+  let allHave;
+  if(type==='bullet')allHave=lines.every(l=>/^\s*•\s/.test(l)||l.trim()==='');
+  else if(type==='number')allHave=lines.every(l=>/^\s*\d+\.\s/.test(l)||l.trim()==='');
+  else if(type==='strike')allHave=lines.every(l=>/^\s*☑\s/.test(l)||l.trim()==='');
+  else allHave=lines.every(l=>/^\s*(☐|☑)\s/.test(l)||l.trim()==='');
+  const anyNonEmpty=lines.some(l=>l.trim()!=='');
+  const shouldRemove=anyNonEmpty&&allHave;
+
+  let num=1;
+  const newLines=lines.map(l=>{
+    if(l.trim()===''&&lines.length>1)return l;
+    const stripped=stripPrefix(l).replace(/^\s+/,'');
+    if(shouldRemove)return stripped;
+    if(type==='bullet')return '• '+stripped;
+    if(type==='todo')return '☐ '+stripped;
+    if(type==='strike')return '☑ '+stripped;
+    const out=num+'. '+stripped;num++;return out;
+  });
+  const newBlock=newLines.join('\n');
+  ta.value=val.slice(0,blockStart)+newBlock+val.slice(blockEnd);
+  ta.selectionStart=blockStart;
+  ta.selectionEnd=blockStart+newBlock.length;
+  onNoteInput();
+}
+
+// ── Enter key: auto-continue lists (bullet/numbered/checklist) ──
+function onNoteKeydown(e){
+  if(e.key!=='Enter')return;
+  const ta=e.target;
+  const val=ta.value;
+  const pos=ta.selectionStart;
+  if(pos!==ta.selectionEnd)return; // leave range selections to default behavior
+  const lineStart=val.lastIndexOf('\n',pos-1)+1;
+  const currentLine=val.slice(lineStart,pos);
+  const m=currentLine.match(/^(\s*)(•\s|☐\s|☑\s|\d+\.\s)/);
+  if(!m)return;
+  const indent=m[1],prefix=m[2];
+  const afterPrefix=currentLine.slice(m[0].length);
+  e.preventDefault();
+  if(afterPrefix.trim()===''){
+    // empty list item — Enter clears the prefix and ends the list
+    const newVal=val.slice(0,lineStart)+val.slice(lineStart+m[0].length);
+    ta.value=newVal;
+    ta.selectionStart=ta.selectionEnd=lineStart;
+  } else {
+    let nextPrefix;
+    if(/^\d+\.\s$/.test(prefix))nextPrefix=(parseInt(prefix,10)+1)+'. ';
+    else if(prefix==='• ')nextPrefix='• ';
+    else nextPrefix='☐ ';
+    const insert='\n'+indent+nextPrefix;
+    ta.value=val.slice(0,pos)+insert+val.slice(pos);
+    ta.selectionStart=ta.selectionEnd=pos+insert.length;
+  }
+  onNoteInput();
+}
+
+// ── click near the checkbox glyph on a to-do line toggles it ──
+function onNoteClick(e){
+  const ta=e.target;
+  const rect=ta.getBoundingClientRect();
+  const style=getComputedStyle(ta);
+  const padLeft=parseFloat(style.paddingLeft)||14;
+  if(e.clientX-rect.left>padLeft+22)return;
+  setTimeout(()=>{
+    const val=ta.value;
+    const pos=ta.selectionStart;
+    const lineStart=val.lastIndexOf('\n',pos-1)+1;
+    const head=val.slice(lineStart,lineStart+2);
+    if(head==='☐ '||head==='☑ '){
+      const newChar=head==='☐ '?'☑ ':'☐ ';
+      ta.value=val.slice(0,lineStart)+newChar+val.slice(lineStart+2);
+      ta.selectionStart=ta.selectionEnd=lineStart+2;
+      onNoteInput();
+    }
+  },0);
+}
+
+function rNotepad(){
+  ensureNotesArray();
+  const fabEl2=document.getElementById('note-fab');
+  if(activeNoteId!=null&&D.notes.find(x=>x.id===activeNoteId)){
+    if(fabEl2)fabEl2.style.display='none';
+    const ta=document.getElementById('note-text');
+    const ti=document.getElementById('note-title-input');
+    if(ta&&ti&&document.activeElement!==ta&&document.activeElement!==ti){
+      const n=D.notes.find(x=>x.id===activeNoteId);
+      ta.value=n.content||'';ti.value=n.title||'';
+      renderNoteBackdrop();
+    }
+  } else {
+    activeNoteId=null;
+    if(fabEl2)fabEl2.style.display='flex';
+    const ec=document.getElementById('note-editor-card'),lc=document.getElementById('note-list-card');
+    if(ec)ec.style.display='none';
+    if(lc)lc.style.display='block';
+  }
+  rNoteList();
 }
 
 // ─── DASHBOARD ───
@@ -1317,9 +1636,25 @@ window.addExp=addExp;
 window.delExp=delExp;
 window.closeModal=closeModal;
 window.setLang=setLang;
-window.saveNote=saveNote;
 window.onNoteInput=onNoteInput;
-window.syncNoteScroll=syncNoteScroll;
+window.newNote=newNote;
+window.openNote=openNote;
+window.closeNoteEditor=closeNoteEditor;
+window.confirmDeleteNote=confirmDeleteNote;
+window.deleteActiveNote=deleteActiveNote;
+window.applyListFormat=applyListFormat;
+window.onNoteKeydown=onNoteKeydown;
+window.onNoteClick=onNoteClick;
+window.rNoteList=rNoteList;
+
+// ── keep the strikethrough backdrop scrolled in sync with the textarea ──
+(function(){
+  const ta=document.getElementById('note-text');
+  const bd=document.getElementById('note-backdrop');
+  if(ta&&bd){
+    ta.addEventListener('scroll',()=>{bd.scrollTop=ta.scrollTop;bd.scrollLeft=ta.scrollLeft;});
+  }
+})();
 
 // ─── INITIAL LANGUAGE APPLY (login screen too) ───
 applyStaticI18n();
